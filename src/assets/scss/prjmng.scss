@@ -1,0 +1,67 @@
+body {
+  text-align: center;
+}
+
+#prj_list {
+  text-align: center;
+  font-size: x-large;
+}
+
+#prj_list a {
+  background: white;
+  color: black;
+  transition: background 0.25s ease-in;
+  transition: color 0.25s ease-in;
+}
+
+#prj_list a:hover {
+  background: black;
+  color: white;
+  cursor: pointer;
+  transition: background 0.25s ease-out;
+  transition: color 0.25s ease-out;
+}
+
+.detail_button {
+    background: whitesmoke;
+    border-radius: 4px;
+    border: none;
+    padding: 5px;
+    width: 5cm;
+    font-family: sans-serif;
+    font-size: 1rem;
+}
+
+.button {
+  background: #1b8f5a;
+  /* applied to the initial state, so this transition will be applied to the return state */
+  transition: background 0.25s ease-in;
+  border-radius: 4px;
+  border: none;
+  padding: 5px;
+  margin: 0;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.button:hover {
+  background: #3eaf7c;
+  /* applied to the hover state, so this transition will be applied when a hover is triggered */
+  transition: background 0.35s ease-out;
+}
+
+.button:active {
+    background: black;
+    transition: background 0.05s ease-out;
+}
+
+.button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s;
+}

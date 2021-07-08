@@ -1,0 +1,72 @@
+.hide {
+    display: none;
+}
+
+.box-unit {
+    margin: 8px;
+    padding: 4px;
+    border: 1px solid rgba(0, 0, 0);
+}
+
+.box-unit button {
+    height: 30px;
+    line-height: 15px;
+    padding: 5px;
+    font-size: 14px;
+    margin: 5px;
+}
+
+.box-unit li {
+    list-style: none;
+}
+
+.box-unit li.selected {
+    color: white;
+    background-color: black;
+}
+
+.bigfont-list li {
+    font-size: 24px;
+}
+
+.bigfont-list li .date {
+    font-size: 12px;
+}
+
+.file-list-container {
+    position: absolute;
+    width: 128px;
+    height: 64px;
+}
+
+li {
+    list-style: none;
+}
+
+li.selected {
+    color: white;
+    background-color: black;
+}
+
+.list-container-1 {
+    position: absolute;
+    width: 240px;
+    height: 480px;
+    transform: translate(1024px, -1024px)
+}
+
+.full_size {
+    width: 90%
+}
+
+.half_size {
+    width: 45%;
+}
+
+#wait-window {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}

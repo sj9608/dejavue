@@ -1,0 +1,19 @@
+.navigation {
+  background-color: gray;
+  border: 5px;
+  border-radius: 5px;
+}
+
+.navigation ul {
+  list-style-type: none;
+}
+
+.navigation li {
+  display: inline-block;
+  margin: 8px;
+}
+
+.navigation li a {
+  text-decoration: none;
+  color: white;
+}
