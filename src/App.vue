@@ -18,6 +18,7 @@ export default {
   },
   async created() {
     console.log('start app...')
+    this.$store.dispatch('loadSettings')
 
   }
 }
