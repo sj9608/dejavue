@@ -1,10 +1,10 @@
 <template>
   <h1>data manager</h1>
 
-  <FileList ref="filelist" @onSelect="onSlectFileList" />
+  <FileList ref="filelist" :baseUrl="redWineUrl" @onSelect="onSlectFileList" />
 
   <div class="box">
-    <ImagerViwer ref="imgViewer" :baseUrl="baseUrl" />
+    <ImagerViwer ref="imgViewer" :baseUrl="coreRestApiUrl" />
   </div>
 
   <button @click="test">test 1</button>
@@ -22,13 +22,17 @@ export default {
     FileList,
   },
   computed: {
-    baseUrl() {
+    coreRestApiUrl() {
       return `${this.$store.state.server_ip}:${this.$store.state.server_port}`;
     },
+    redWineUrl() {
+      return `${this.$store.state.server_ip}:21033`
+    }
   },
   mounted() {
+    //현재 프로잭트 디랙토리로 이동 
     this.$refs.filelist.updateFileList(
-      `${this.$store.state.server_ip}:21033`,
+      // `${this.$store.state.server_ip}:21033`,
       "/home/gbox3d/work/dataset/handsign/"
     );
     this.$refs.imgViewer.loadImage(
@@ -43,7 +47,7 @@ export default {
 
       if (item.type.charAt(0) == "d") {
         this.$refs.filelist.updateFileList(
-          `${this.$store.state.server_ip}:21033`,
+          // `${this.$store.state.server_ip}:21033`,
           `${this.$refs.filelist.path}/${item.name}`
         );
       } else {

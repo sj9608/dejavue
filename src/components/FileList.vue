@@ -18,6 +18,12 @@
 export default {
   name: "FileList",
   emits: ["onSelect"],
+  props: {
+    baseUrl: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       filelist: [],
@@ -26,8 +32,9 @@ export default {
     };
   },
   methods: {
-    async updateFileList(baseUrl, path) {
+    async updateFileList( path) {
       this.path = path;
+      let baseUrl = this.baseUrl;
       let url = `http://${baseUrl}/rest/exec?cmd=ls -al&cwd=${path}`;
 
       //   console.log(url);
