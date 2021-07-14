@@ -48,9 +48,15 @@ export const store = createStore({
     // getSettings(state) {
     // },
     updateServerIp(state, playload) {
-      // console.log(playload)
+      console.log(playload)
       state.server_ip = playload.server_ip
       localStorage.setItem('server_ip', state.server_ip)
+
+    },
+    updateServerPort(state, playload) {
+      console.log(playload)
+      state.server_port = playload.server_port
+      localStorage.setItem('server_port', state.server_port)
 
     },
     updateSettings(state,playload) {

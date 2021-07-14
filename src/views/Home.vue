@@ -1,9 +1,11 @@
 
 <template>
   <h1>Project Dejavue version 1.0</h1>
-  ip : <input type="text" v-model="serverIp" /> ip :
-  <input type="text" v-model="serverPort" />
-  <p>{{settingsData.dataset_base_path}}</p>
+  <div>
+    ip : <input type="text" v-model="serverIp" /> 
+    port : <input type="text" v-model="serverPort" />
+  </div>
+  <p>{{ settingsData.dataset_base_path }}</p>
   <p>copyright 2021 unnamed company</p>
 </template>
 <script>
@@ -30,16 +32,14 @@ export default {
         // console.log(value);
         this.$store.commit({
           type: "updateServerPort",
-          server_ip: value,
+          server_port: value,
         });
       },
     },
     settingsData() {
-      return this.$store.state.settings
-
+      return this.$store.state.settings;
     },
   },
-
 
   // created() {
   //   console.log(this.$store.state.server_port)
