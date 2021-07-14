@@ -1,22 +1,71 @@
 <template>
   <h1>data manager</h1>
-  <ImagerViwer :baseUrl="baseUrl"/>
+
+  <FileList ref="filelist" @onSelect="onSlectFileList" />
+
+  <div class="box">
+    <ImagerViwer ref="imgViewer" :baseUrl="baseUrl" />
+  </div>
+
+  <button @click="test">test 1</button>
+  <button @click="clearImage">test 2</button>
 </template>
 
 <script>
-
-import ImagerViwer from '@/components/ImageViewer.vue'
+import ImagerViwer from "@/components/ImageViewer.vue";
+import FileList from "@/components/FileList.vue";
 
 export default {
   name: "dataMng",
-  components : {
-    ImagerViwer
-
+  components: {
+    ImagerViwer,
+    FileList,
   },
-  computed : {
+  computed: {
     baseUrl() {
-      return `${this.$store.state.server_ip}:${this.$store.state.server_port}`
-    }
-  }
+      return `${this.$store.state.server_ip}:${this.$store.state.server_port}`;
+    },
+  },
+  mounted() {
+    this.$refs.filelist.updateFileList(
+      `${this.$store.state.server_ip}:21033`,
+      "/home/gbox3d/work/dataset/handsign/"
+    );
+    this.$refs.imgViewer.loadImage(
+      "/home/gbox3d/work/visionApp/daisy_project/www/download.jpg"
+    );
+  },
+  methods: {
+    onSlectFileList(item) {
+
+      console.log('update')
+      let filter = ["jpg", "png", "jpeg"];
+
+      if (item.type.charAt(0) == "d") {
+        this.$refs.filelist.updateFileList(
+          `${this.$store.state.server_ip}:21033`,
+          `${this.$refs.filelist.path}/${item.name}`
+        );
+      } else {
+        console.log(item.name);
+
+        if (filter.indexOf(item.name.split(".")[1]) >= 0) {
+          //이미지 파일
+          this.$refs.imgViewer.loadImage(
+            `${this.$refs.filelist.path}/${item.name}`
+          );
+        }
+      }
+    },
+    clearImage() {
+      this.$refs.imgViewer.clear();
+    },
+  },
 };
 </script>
+
+<style>
+.box {
+  border: 1px solid black;
+}
+</style>
