@@ -1,34 +1,60 @@
+
 <template>
-  <title> The Project Daisy </title>
+  <h1>Project Dejavue version 1.0</h1>
+  <div>
+    ip : <input type="text" v-model="serverIp" /> 
+    port : <input type="text" v-model="serverPort" />
+  </div>
 
-  <body>
-    <div>
-        <h1>Welcome To The Projet Daisy</h1>
-        <!-- <img src="download.jpg"> -->
-    </div>
-  </body>
+  <div  v-if="errmsg" >
+    <p> {{errmsg}} </p>
+    <p> check server address! </p>
 
+  </div>
+  <div v-else>
+    <p>{{ settingsData.dataset_base_path }}</p>
+    <p>copyright 2021 unnamed company</p>
+  </div>
+  
 </template>
-
-
 <script>
-
 export default {
-  name: 'Home',
-  components: {
-
+  name: "Home",
+  computed: {
+    errmsg() {
+      return this.$store.state.err_msg;
+    },
+    serverIp: {
+      get() {
+        return this.$store.state.server_ip;
+      },
+      set(value) {
+        // console.log(value);
+        this.$store.commit({
+          type: "updateServerIp",
+          server_ip: value,
+        });
+      },
+    },
+    serverPort: {
+      get() {
+        return this.$store.state.server_port;
+      },
+      set(value) {
+        // console.log(value);
+        this.$store.commit({
+          type: "updateServerPort",
+          server_port: value,
+        });
+      },
+    },
+    settingsData() {
+      return this.$store.state.settings;
+    },
   },
+
+  // created() {
+  //   console.log(this.$store.state.server_port)
+  // }
 };
-
 </script>
-
-
-<style>
-.hide {
-  display: none;
-}
-
-h1 {
-  text-align: center;
-}
-</style>

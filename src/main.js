@@ -1,9 +1,7 @@
 import { createApp } from 'vue'
 import { router } from './router'; 
+import {store}  from './store';
 import App from './App.vue'
 
-// Create Vue Instance
-const app = createApp(App);
+createApp(App).use(router).use(store).mount('#app') // 메서드 체인 (함수형 프로그래밍)
 
-app.use(router); // 사용 설정 하기
-app.mount('#app');

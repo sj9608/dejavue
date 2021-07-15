@@ -18,9 +18,9 @@ const routes = [
         component: () => import('@/views/opserver')
     },
     {
-        path: '/data_mng',
-        name: 'data_mng',
-        component: () => import('@/views/data_mng')
+        path: '/datamng',
+        name: 'DataMng',
+        component: () => import('@/views/dataMng')
     },
     {
         path: '/img_labeler',
@@ -36,6 +36,11 @@ const routes = [
         path: '/trainer',
         name: 'trainer',
         component: () => import('@/views/trainer')
+    },
+    {
+        path: '/datamng',
+        name: 'DataMng',
+        component: () => import('@/views/dataMng'), // 동적 import
     },
     {
         path: '/help',

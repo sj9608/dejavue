@@ -1,10 +1,9 @@
+
 <template>
-  <div>
-    로그인
-  </div>
+  <h1>about</h1>
 </template>
 <script>
 export default {
-  name: 'datamanager',
+  name: "About",
 };
 </script>
