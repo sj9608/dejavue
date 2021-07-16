@@ -26,14 +26,24 @@ export default {
       return `${this.$store.state.server_ip}:${this.$store.state.server_port}`;
     },
     redWineUrl() {
-      return `${this.$store.state.server_ip}:21033`
+      console.log(`${this.$store.state.server_ip}:${this.currentPrj.wine_port}`)
+      return `${this.$store.state.server_ip}:${this.currentPrj.wine_port}`
+    },
+    currentPrj() {
+        console.log(this.$store.state.projectName)
+        return this.$store.state.settings.prjs[this.$store.state.projectName] ? this.$store.state.settings.prjs[this.$store.state.projectName] : {};
+    },
+    datasetBasePath() {
+      return this.$store.state.settings.dataset_base_path
     }
   },
   mounted() {
     //현재 프로잭트 디랙토리로 이동 
     this.$refs.filelist.updateFileList(
       // `${this.$store.state.server_ip}:21033`,
-      "/home/gbox3d/work/dataset/handsign/"
+      // "/home/gbox3d/work/dataset/handsign/"
+      `${this.datasetBasePath}/${this.currentPrj.dataset_path}`
+      
     );
     this.$refs.imgViewer.loadImage(
       "/home/gbox3d/work/visionApp/daisy_project/www/download.jpg"

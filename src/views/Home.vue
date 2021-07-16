@@ -12,6 +12,7 @@
 
   </div>
   <div v-else>
+    <p>{{prjName}}</p>
     <p>{{ settingsData.dataset_base_path }}</p>
     <p>copyright 2021 unnamed company</p>
   </div>
@@ -51,7 +52,11 @@ export default {
     settingsData() {
       return this.$store.state.settings;
     },
+    prjName() {
+      return this.$store.state.projectName
+    }
   },
+  
 
   // created() {
   //   console.log(this.$store.state.server_port)
