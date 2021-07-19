@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import jsyaml from 'js-yaml'
 
 // Create a new store instance.
 export const store = createStore({
@@ -23,12 +24,14 @@ export const store = createStore({
       server_port: _server_port,
       settings: {},
       projectName: (localStorage.prj_name ? localStorage.prj_name : ''),
-      err_msg: ''
+      err_msg: '',
+      bWaitWindow: false,
+      dataset_conf: {},
     }
   },
   actions: {
     async loadSettings(context) {
-      console.log(context)
+      // console.log(context)
 
       //설정파일 읽어오기 
       try {
@@ -38,6 +41,19 @@ export const store = createStore({
 
         context.commit({ type: 'updateSettings', data: configData })
 
+        //data.yaml 로딩 
+        if (context.state.projectName && context.state.projectName != "") {
+          // console.log(`${context.state.settings.dataset_base_path}/${context.state.settings.prjs[context.state.projectName].dataset_path}/data.yaml`)
+
+          let _url = `${context.state.settings.dataset_base_path}/${context.state.settings.prjs[context.state.projectName].dataset_path}/data.yaml`;
+
+          let dataset_conf = await (await fetch(`http://${context.state.server_ip}:${context.state.server_port}/rest/download?filepath=${_url}`)).text()
+
+          dataset_conf = jsyaml.load(dataset_conf)
+
+          console.log(dataset_conf)
+          context.commit({ type: 'updateDataSetConf', data: dataset_conf })
+        }
       }
       catch (e) {
         console.log(e)
@@ -45,7 +61,30 @@ export const store = createStore({
 
       }
     },
-    async updateSettings(context,playload) {
+    async updateProjrctName(context, playload) {
+
+      context.commit({
+        type: "updateProjrctName",
+        prj_name: playload.prj_name,
+      });
+
+      try {
+
+        let _url = `${context.state.settings.dataset_base_path}/${context.state.settings.prjs[playload.prj_name].dataset_path}/data.yaml`;
+        let dataset_conf = await (await fetch(`http://${context.state.server_ip}:${context.state.server_port}/rest/download?filepath=${_url}`)).text()
+        dataset_conf = jsyaml.load(dataset_conf)
+
+        console.log(dataset_conf)
+        context.commit({ type: 'updateDataSetConf', data: dataset_conf })
+
+      } catch (e) {
+        console.log(e)
+      }
+
+
+
+    },
+    async updateSettings(context, playload) {
       let _out = JSON.stringify(playload.data);
 
       let _ = await (
@@ -72,6 +111,13 @@ export const store = createStore({
   mutations: {
     // getSettings(state) {
     // },
+    showWaitWindow(state) {
+      state.bWaitWindow = true
+      // console.log(state.bWaitWindow)
+    },
+    hideWaitWindow(state) {
+      state.bWaitWindow = false
+    },
     updateProjrctName(state, playload) {
       state.projectName = playload.prj_name
       console.log(state.projectName)
@@ -91,16 +137,10 @@ export const store = createStore({
     },
     updateSettings(state, playload) {
       state.settings = playload.data
+    },
+    updateDataSetConf(state, playload) {
+      state.dataset_conf = playload.data
     }
-    // increment (state) {
-    //   state.count++
-    // },
-    // decrement (state) {
-    //   state.count--
-    // },
-    // setvalue(state,playload) {
-    //   state.count = playload.value
-    // }
   }
 })
 

@@ -85,6 +85,14 @@
           <span class="bar"></span>
           <label>Image Size</label>
         </div>
+
+        <div class="group" >
+
+          <p> {{dataset_conf.names}} </p>
+
+        </div>
+
+
       </div>
       <button @click="update_config" class="button">Update</button>
     </div>
@@ -202,7 +210,7 @@ export default {
         return this.configData.prjs[this.$store.state.projectName] ? this.configData.prjs[this.$store.state.projectName] : {};
       },
       set(value) {
-        this.$store.commit({
+        this.$store.dispatch({
           type: "updateProjrctName",
           prj_name: value,
         });
@@ -220,6 +228,12 @@ export default {
       // } else
       
     },
+    dataset_conf : {
+      get() {
+        // if(this.$store.state.dataset_conf)
+        return this.$store.state.dataset_conf
+      }
+    }
   },
   methods: {
     show_prj() {
@@ -460,6 +474,8 @@ export default {
     console.log(this.configData.prjs);
 
     this.prj_list = values(this.configData.prjs);
+
+
 
     // for (let key in this.configData.prjs) {
     //   // console.log(prj_name);

@@ -1,4 +1,5 @@
 <template>
+  <div class="wait-window" v-if="bWaitWindow"></div>
   <Nav />
   <div>
     <router-view />
@@ -6,19 +7,24 @@
 </template>
 
 <script>
-import Nav from './components/Nav.vue'
+import Nav from "./components/Nav.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Nav,
   },
   async created() {
-    console.log('start app...')
-    this.$store.dispatch('loadSettings')
-
-  }
-}
+    console.log("start app...");
+    this.$store.dispatch("loadSettings");
+  },
+  computed: {
+    bWaitWindow() { //대기창 상태
+      // console.log(this.$store.state.bWaitWindow)
+      return this.$store.state.bWaitWindow;
+    },
+  },
+};
 </script>
 
 <style>
@@ -31,4 +37,11 @@ export default {
   margin-top: 10px;
 }
 
+.wait-window {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
 </style>
