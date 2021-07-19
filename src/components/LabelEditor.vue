@@ -4,8 +4,8 @@
     <!-- <input type="text" /> -->
     <canvas ref="canvas" width="1024" height="1024"></canvas>
 
-    <hr />
-    <button @click="test">test</button>
+    <!-- <hr />
+    <button @click="test">test</button> -->
   </div>
 </template>
 
@@ -28,9 +28,9 @@ export default {
   computed : {
   },
   methods: {
-    test() {
-      this.editor.showCrossLine();
-    },
+    // test() {
+    //   this.editor.showCrossLine();
+    // },
   },
   mounted() {
     //   console.log(this.$props.config)
@@ -51,6 +51,7 @@ export default {
       canvasID: this.$refs.canvas,
       cbChangeProperty: (label_obj) => {
         console.log(label_obj);
+        this.$emit("onChangeProperty", label_obj);
 
         // //라벨 수정 할때...
         // let rect = label_obj.rect;

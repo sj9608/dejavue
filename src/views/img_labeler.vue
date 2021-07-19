@@ -7,7 +7,7 @@
 
   <FileList ref="filelist" :baseUrl="redWineUrl" @onSelect="onSlectFileList" />
   <hr />
-  <select v-model="selectedLabel" @change="onLabelSelected(item)">
+  <select v-model="selectedLabel" @change="onLabelNameSelected">
     <option
       v-for="(item, index) in labelInfo_a"
       :key="index"
@@ -19,7 +19,7 @@
 
   <hr />
   <div>
-    <LabelEditor ref="labelEditor" :config="currentPrj" />
+    <LabelEditor ref="labelEditor" :config="currentPrj" @onChangeProperty="onLabelPropertyChanged" />
   </div>
 
   <hr />
@@ -103,14 +103,19 @@ export default {
 
         if (filter.indexOf(_ext) >= 0) {
           //이미지 파일
+          this.editor.loadImage(`${this.$refs.filelist.path}/${item.name}`)
+          
           //   this.$refs.imgViewer.loadImage(
           //     `${this.$refs.filelist.path}/${item.name}`
           //   );
         }
       }
     },
-    onLabelSelected() {
+    onLabelNameSelected() {
       console.log(this.selectedLabel);
+    },
+    onLabelPropertyChanged(item) {
+      console.log(item)
     },
     async onkeydown(evt) {
       console.log(evt);
