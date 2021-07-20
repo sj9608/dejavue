@@ -2,15 +2,17 @@
   <div class="file-list-root">
     <p>{{ path }}</p>
     <p>{{ selectItem.name }}</p>
-    <ul>
+    <ul ref="fileListContiner">
       <li
         v-for="(item, index) in filelist"
         :key="index"
-        @click="selectList(item)"
+        @click="selectList(item,$event)"
+        :class="{selected:selectItem.name == item.name}"
       >
         {{ item.type }},{{ item.name }}
       </li>
     </ul>
+    <button @click="onGetoSelect"> scroll to select </button>
   </div>
 </template>
 
@@ -28,7 +30,9 @@ export default {
     return {
       filelist: [],
       selectItem: {},
+      // selectIndex : -1,
       path: "",
+      currentListItem : null,
     };
   },
   methods: {
@@ -44,6 +48,7 @@ export default {
       let files = _.stdout.split("\n");
 
       let _fileList = [];
+      let _index = 0
 
       files.forEach((name) => {
         let _info = name.split(" ");
@@ -63,6 +68,7 @@ export default {
 
         if (_info.length >= 9) {
           _fileList.push({
+            index : _index++,
             type: _info[0], //d 면 디랙토리
             name: _info[_info.length - 1],
           });
@@ -82,10 +88,50 @@ export default {
 
       }
     },
-    selectList(item) {
+    selectList(item,evt) {
       console.log(item);
       this.selectItem = item;
+      // this.selectIndex = index;
       this.$emit("onSelect", item);
+
+      // console.log(evt.target.offsetTop)
+      // offsetTop = evt.target.offsetTop
+      this.currentListItem = evt.target 
+      
+    },
+    selectNextItem() {
+      if(this.currentListItem.nextElementSibling) {
+        
+        this.currentListItem = this.currentListItem.nextElementSibling;
+        this.selectItem = this.filelist[this.selectItem.index+1]
+        // console.log(this.currentListItem.itemAttr)
+        // this.selectIndex++
+        // this.selectItem = this.filelist[this.selectIndex];
+        // // this.selectIndex.index = index;
+        this.$emit("onSelect", this.selectItem);
+        
+      }
+    },
+    selectPrevItem() {
+      if(this.currentListItem.previousSibling) {
+        
+        
+        this.currentListItem = this.currentListItem.previousSibling;
+        this.selectItem = this.filelist[this.selectItem.index-1]
+
+        // this.selectIndex--
+        // this.selectItem = this.filelist[this.selectIndex];
+        // // this.selectIndex.index = index;
+        this.$emit("onSelect", this.selectItem);
+        
+      }
+    },
+    onGetoSelect() {
+      // console.log(this.$refs.fileListContiner.offsetTop)
+      //선택위치로 스크롤 조정 (주. 원래 위치에서 콘테이너 위치 만큼 빼주기)
+      this.$refs.fileListContiner.scrollTop = this.currentListItem.offsetTop - this.$refs.fileListContiner.offsetTop;
+      // console.log(this.currentListItem.offsetTop)
+
     },
   },
 };
@@ -105,5 +151,8 @@ export default {
 }
 .file-list-root li {
   color: yellow;
+}
+.file-list-root li.selected {
+  background-color: black;
 }
 </style>

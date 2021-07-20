@@ -251,7 +251,7 @@ class ANEditor {
     }
 
     //voc
-    async loadVocLabelData(name, color_table) {
+    async loadVocLabelData(name, label_def) {
 
         try {
 
@@ -303,45 +303,55 @@ class ANEditor {
 
             let _labelObj = _label_data.annotation.object
 
+            console.log(_labelObj)
+
             if (Array.isArray(_labelObj)) { //배열이면
                 _labelObj.forEach(_ => {
+
+                    let _label_define = label_def[_.name._text]
                     // if(color_table) 
-                    if (_ && _.bndbox) {
+                    if (_ && _.bndbox && _label_define) {
                         this.addLabelObject({
                             xmin: parseInt(_.bndbox.xmin._text),
                             xmax: parseInt(_.bndbox.xmax._text),
                             ymin: parseInt(_.bndbox.ymin._text),
                             ymax: parseInt(_.bndbox.ymax._text),
                             class_name: _.name._text,
-                            color: color_table[_.name._text]
+                            color: _label_define.color
                         })
                     }
-
+                    else {
+                        console.log(`cannot load ${_.name._text}`)
+                    }
 
                 })
 
             } else { //배열이 아닐경우 
-                if (_labelObj && _labelObj.bndbox) {
+                
+                let _label_define = label_def[_labelObj.name._text]
+                
+                if (_labelObj && _labelObj.bndbox && _label_define) {
                     this.addLabelObject({
                         xmin: parseInt(_labelObj.bndbox.xmin._text),
                         xmax: parseInt(_labelObj.bndbox.xmax._text),
                         ymin: parseInt(_labelObj.bndbox.ymin._text),
                         ymax: parseInt(_labelObj.bndbox.ymax._text),
                         class_name: _labelObj.name._text,
-                        color: color_table[_labelObj.name._text]
+                        color: label_def[_labelObj.name._text].color
                     })
+                }
+                else {
+                    console.log(`cannot load ${_labelObj.name._text}`)
+                
                 }
                 // this.cbChangeProperty(label_obj)
             }
-
             this.fbCanvas.requestRenderAll()
-
-            // return [xmin, ymin, xmax, ymax]
-            return
+            return {r:'ok',d:_labelObj}
 
         } catch (e) {
             console.log(e)
-            return e
+            return {r:'err',err:e}
         }
     }
     async saveVocLabelData(uploadName,upload_img_name="") {
@@ -458,6 +468,7 @@ class ANEditor {
 
         try {
             // let _path = `${this.config.dataset_path}/src/${name}.png`
+            console.log(`load img : ${_path}`)
 
             let _bolb = await (await fetch(`http://${this.restApiAddress}/download?filepath=${_path}`)).blob()
             let data_uri = URL.createObjectURL(_bolb);
@@ -477,6 +488,7 @@ class ANEditor {
             })
             _img_obj.rotate(0)
             _img_obj.setPositionByOrigin({ x: this.fbCanvas.width / 2, y: this.fbCanvas.height / 2 });
+            // _img_obj.setPositionByOrigin({ x: 0, y: 0 });
             _img_obj.setElement(_imgElement);
             _img_obj.setCoords();
             _img_obj.filename = _path
