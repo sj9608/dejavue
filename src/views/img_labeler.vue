@@ -52,7 +52,7 @@ export default {
   computed: {
     selectImgName() {
 
-      if(this.$refs.filelist.selectItem.name)
+      if( this.$refs.filelist && this.$refs.filelist.selectItem && this.$refs.filelist.selectItem.name )
         return this.$refs.filelist.selectItem.name.split('.')[0]
       else return 'select file'
 
