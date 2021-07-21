@@ -36,10 +36,12 @@ export default {
     };
   },
   methods: {
-    async updateFileList( path) {
-      this.path = path;
+    async updateFileList(path) {
+      if(path)
+        this.path = path;
+
       let baseUrl = this.baseUrl;
-      let url = `http://${baseUrl}/rest/exec?cmd=ls -al&cwd=${path}`;
+      let url =  `http://${baseUrl}/rest/exec?cmd=ls -al&cwd=${this.path}`;
 
       //   console.log(url);
       let _ = await (await fetch(url)).json();
@@ -125,6 +127,21 @@ export default {
         this.$emit("onSelect", this.selectItem);
         
       }
+    },
+    async delSelectItem() {
+
+      //http://gears001.iptime.org:21033/rest/exec?cmd=rm maxresdefault-1(0).xml&cwd=/home/gbox3d/work/dataset/mecard/voc
+
+      // console.log(`${this.path}/${this.selectItem.name}`);
+      // let _file = `/`
+      let url = `http://${this.baseUrl}/rest/exec?cmd=rm '${encodeURI(this.selectItem.name)}'&cwd=${this.path}`;
+
+      console.log(url)
+
+      let _ = await (await fetch(url)).json();
+      console.log(_)
+
+      return _
     },
     onGetoSelect() {
       // console.log(this.$refs.fileListContiner.offsetTop)

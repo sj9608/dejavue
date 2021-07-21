@@ -78,6 +78,15 @@ class ANEditor {
         this.selectedLabel = undefined
         this.restApiAddress = `${this.config.base_ip}:${this.config.rest_port}/rest`
     }
+    changeSelectedLabelAttr({name,color}) {
+
+        if(this.selectedLabel) {
+            this.selectedLabel.class = name
+            //this.editor.selectedLabel.rect.set("stroke", this.labelInfo[this.selectedLabel].color) //컬러 변경 
+            this.selectedLabel.rect.set("stroke", color)
+            this.fbCanvas.renderAll()
+        }
+    }
     toNoneScale(_obj) {
 
         // {
@@ -126,7 +135,7 @@ class ANEditor {
         obj.setCoords()
 
     }
-    addLabelObject({ xmin, ymin, xmax, ymax, class_name, translate = true, color = 'red' }) {
+    addLabelObject({ xmin, ymin, xmax, ymax, class_name, color = 'red',translate = true  }) {
 
         let imgszRect = this.imgszRect
 
@@ -354,10 +363,11 @@ class ANEditor {
             return {r:'err',err:e}
         }
     }
-    async saveVocLabelData(uploadName,upload_img_name="") {
+    async saveVocLabelData({uploadName,uploadImgName,uploadPath}) {
         // console.log(theApp.labelObjs)
 
-        let uploadPath = `${this.config.dataset_path}/voc`
+        // let uploadPath = `${this.config.dataset_path}/voc`
+
         let base_pt = {
             x: this.imgszRect.aCoords.tl.x,
             y: this.imgszRect.aCoords.tl.y
@@ -365,11 +375,11 @@ class ANEditor {
 
 
         // let filename = this.imgObj.filename.replace(/^.*[\\\/]/, '')
-        let filename = this.item.name.split(".")[0];
+        // let filename = this.item.name.split(".")[0];
 
-        if(upload_img_name != "") {
-            filename = upload_img_name
-        }
+        // if(upload_img_name != "") {
+        //     filename = upload_img_name
+        // }
 
 
         let _anno = {
@@ -378,7 +388,7 @@ class ANEditor {
                     _text: 'Unspecified'
                 },
                 filename: {
-                    _text: filename
+                    _text: uploadImgName
                 },
                 path: { _text: 'Unspecified' },
                 source: { database: { _text: 'Unknown' } },
@@ -425,8 +435,6 @@ class ANEditor {
                 }
             }
             _anno.annotation.object.push(_bb)
-            // _labelObj.add(_bb)
-            // console.log(_bb)
         })
         let xml = json2xml(_anno, { compact: true })
         console.log(xml)
@@ -444,6 +452,8 @@ class ANEditor {
             }), // 이 부분은 따로 설정하고싶은 header가 있다면 넣으세요
         }))).json();
         console.log(_)
+
+        return _
     }
     //정량화된 크기구하기 
     getImgRectBound() {
