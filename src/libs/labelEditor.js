@@ -49,6 +49,7 @@ class ANEditor {
             this.imgszRect = imgszRect
             imgszRect.setPositionByOrigin({ x: fbCanvas.width / 2, y: fbCanvas.height / 2 });
             imgszRect.setCoords()
+            
 
 
             //cross line
@@ -74,9 +75,23 @@ class ANEditor {
         this.cbChangeProperty = cbChangeProperty
 
         this.config = config
+        console.log(config)
         this.labelObjs = []
         this.selectedLabel = undefined
         this.restApiAddress = `${this.config.base_ip}:${this.config.rest_port}/rest`
+    }
+    //작업영역 바운딩 박스 구하기 
+    getImgRectBound() {
+        //실제 이미지에 정수화된 길이값으로 구하기
+
+        // let _bound = this.imgszRect.getBoundingRect()
+
+        return { 
+            left:  Math.round(this.fbCanvas.width/2 - this.config.imgsz/2),  //Math.floor( _bound.left),
+            top: Math.round(this.fbCanvas.height/2 - this.config.imgsz/2),    //Math.floor( _bound.top ),
+            width : this.config.imgsz,
+            height : this.config.imgsz
+        }
     }
     changeSelectedLabelAttr({name,color}) {
 
@@ -103,8 +118,8 @@ class ANEditor {
             scaleY: 1
         }
         let _tran = {
-            x: (xmin + xmax) / 2,
-            y: (ymin + ymax) / 2
+            x: Math.round((xmin + xmax) / 2),
+            y: Math.round((ymin + ymax) / 2)
         }
         // console.log(_opt)
         // console.log(_tran)
@@ -137,22 +152,33 @@ class ANEditor {
     }
     addLabelObject({ xmin, ymin, xmax, ymax, class_name, color = 'red',translate = true  }) {
 
-        let imgszRect = this.imgszRect
+        // let imgszRect = this.imgszRect
 
-        let _left = (xmin + (xmax - xmin) / 2)
-        let _top = (ymin + (ymax - ymin) / 2)
+        let imgBnd = this.getImgRectBound()
+
+        let _w = xmax - xmin;
+        let _h = ymax - ymin;
+
+        console.log(_w,_h)
+
+        let _left = (xmin + _w / 2);
+        let _top  = (ymin + _h / 2);
 
         if (translate) { //좌상단기준으로 이동후 중심점에 맞추기 
-            _left += imgszRect.aCoords.tl.x
-            _top += imgszRect.aCoords.tl.y
+            
+            _left += imgBnd.left//(512 - this.config.imgsz/2)
+            _top +=  imgBnd.top//(512 - this.config.imgsz/2)
+
+            // _left += imgszRect.aCoords.tl.x
+            // _top += imgszRect.aCoords.tl.y
         }
 
         let rect = new fabric.Rect({
             fill: 'transparent',
             stroke: color,
             strokeWidth: 2,
-            width: xmax - xmin,
-            height: ymax - ymin,
+            width: _w,
+            height: _h,
             left: _left,
             top: _top,
             // hasRotatingPoint: false,
@@ -183,11 +209,6 @@ class ANEditor {
             this.selectedLabel = label_obj
             this.cbChangeProperty && this.cbChangeProperty(label_obj)
         })
-        // rect.on('deselected', () => {
-        //     console.log('deselect')
-        //     this.selectedLabel = null
-
-        // })
 
         this.cbChangeProperty && this.cbChangeProperty(label_obj)
         return label_obj
@@ -455,23 +476,7 @@ class ANEditor {
 
         return _
     }
-    //정량화된 크기구하기 
-    getImgRectBound() {
-        //실제 이미지에 정수화된 길이값으로 구하기
-
-        let _bound = this.imgszRect.getBoundingRect()
-
-        return { 
-            left:  Math.floor( _bound.left),
-            top: Math.floor( _bound.top ),
-            // width: _bound.width,
-            // height: _bound.height, 
-            width : this.config.imgsz,
-            height : this.config.imgsz,
-        }
-
-
-    }
+    
 
     //img
     async loadImage(_path) {
@@ -677,6 +682,9 @@ class ANEditor {
                 method: 'POST',
                 body: _blob,
                 headers: new Headers({
+                    'Content-Type': 'text/plain',
+                    // 'Access-Control-Allow-Origin': '*',
+                    // 'Access-Control-Allow-Methods': 'POST',
                     'detector-header-data': JSON.stringify({ fn: 'none', th: 0.25, iou: 0.45, dtf: 'yolov5' })
                 })
             }))).json();

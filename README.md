@@ -22,3 +22,10 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
+### todo
+업로더  
+오토 디택터  
+동영상을 스냅샷으로 변환  

@@ -40,9 +40,6 @@ export default {
         this.editor.imgObj.scaleY = _scale
 
     },
-    // test() {
-    //   this.editor.showCrossLine();
-    // },
   },
   mounted() {
     //   console.log(this.$props.config)
@@ -63,7 +60,17 @@ export default {
       canvasID: this.$refs.canvas,
       cbChangeProperty: (label_obj) => {
         console.log(label_obj);
-        this.$emit("onChangeProperty", label_obj);
+        
+        this.$emit("onChangeProperty", {
+          class_name : label_obj.class,
+          bbox : {
+            minx : label_obj.rect.aCoords.tl.x,
+            miny : label_obj.rect.aCoords.tl.y,
+            maxx : label_obj.rect.aCoords.br.x,
+            maxy : label_obj.rect.aCoords.br.y
+          },
+          obj : label_obj
+        });
 
         // //라벨 수정 할때...
         // let rect = label_obj.rect;

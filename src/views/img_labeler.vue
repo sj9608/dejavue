@@ -20,6 +20,7 @@
   </select>
 
   <hr />
+  <p>label info : {{ labelInfoMsg }} </p>
   <p>status : {{ statusMsg }}</p>
   <div>
     <LabelEditor
@@ -52,13 +53,10 @@ export default {
   },
   computed: {
     // selectImgName() {
-
     // if( this.$refs.filelist && this.$refs.filelist.selectItem && this.$refs.filelist.selectItem.name )
     //   return this.$refs.filelist.selectItem.name.split('.')[0]
     // else return 'select file'
-
     // return this.$refs.filelist.selectItem.name.split('.')[0]
-
     // } ,
     vocPath() {
       return this.$store.state.dataset_conf.voc;
@@ -85,6 +83,7 @@ export default {
   data() {
     return {
       statusMsg: "",
+      labelInfoMsg : "",
       selectImgName: "",
       selectedLabel: "",
       labelInfo: {
@@ -123,19 +122,24 @@ export default {
         dts.forEach((_dt) => {
           // console.log(_dt)
 
-          // let _conf = _dt[2]
-          let cls_name = this.dataset_conf.names[_dt[3]];
+          console.log(this.labelInfo_a)
+          console.log(_dt)
 
-          let _obj = this.editor.addLabelObject({
-            xmin: _dt[0][0],
-            ymin: _dt[0][1],
-            xmax: _dt[1][0],
-            ymax: _dt[1][1],
-            class_name: cls_name,
-            translate: true,
-            color: this.color_table[cls_name],
-          });
-          console.log(_obj);
+          //아래부분 예외처리후 완성해야함 2021.7.22...
+
+          // let _conf = _dt[2]
+          // let cls_name = this.dataset_conf.names[_dt[3]];
+
+          // let _obj = this.editor.addLabelObject({
+          //   xmin: _dt[0][0],
+          //   ymin: _dt[0][1],
+          //   xmax: _dt[1][0],
+          //   ymax: _dt[1][1],
+          //   class_name: cls_name,
+          //   translate: true,
+          //   color: this.color_table[cls_name],
+          // });
+          // console.log(_obj);
         });
         this.editor.fbCanvas.requestRenderAll();
       }
@@ -304,12 +308,13 @@ export default {
     },
     onLabelNameSelected() {
       console.log(this.selectedLabel);
-      // console.log(this.editor.selectedLabel)
-      this.editor.changeSelectedLabelAttr( this.labelInfo[this.selectedLabel] )
+      this.editor.changeSelectedLabelAttr( this.labelInfo[this.selectedLabel] );
+    
 
     },
-    onLabelPropertyChanged(item) {
+    onLabelPropertyChanged(item) { //라벨 편집 내용이 갱신될때마다.
       console.log(item);
+      this.labelInfoMsg = `${item.class_name} , topleft(${item.bbox.minx},${item.bbox.miny}) `
     },
     async onkeydown(evt) {
       console.log(evt);

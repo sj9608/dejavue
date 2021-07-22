@@ -28,6 +28,7 @@ export default {
 </script>
 
 <style  >
+
 #app {
   /* font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -44,4 +45,8 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
 }
+
+@import "assets/scss/core.scss";
+@import "assets/scss/prjmng2.scss";
+@import "assets/scss/input_box.scss";
 </style>

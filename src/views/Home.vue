@@ -66,6 +66,5 @@ export default {
 
 
 <style>
-@import "../assets/scss/prjmng2.scss";
-@import "../assets/scss/input_box.scss";
+
 </style>
